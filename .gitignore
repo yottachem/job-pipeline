@@ -1,0 +1,30 @@
+# System and tooling
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+~$*.docx
+
+# Generated
+dashboard/index.html
+
+# ------------------------------------------------------------------
+# PERSONAL DATA. Keep your copy of this repo PRIVATE (recommended).
+# If your copy is public, setup step 5 uncomments this block so your
+# CV, profile, and application history are never committed.
+# ------------------------------------------------------------------
+# cv/*
+# !cv/README.md
+# profile/*
+# !profile/README.md
+# brainstorms/*
+# jds/*
+# analyses/*
+# cover-letters/*
+# applications/*
+# !applications/README.md
+# applications.csv
+# outcomes.md
+# calibration/*
+# *.docx
+# *.pdf

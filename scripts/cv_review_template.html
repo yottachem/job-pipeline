@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {{
+    --bg: #F3F5F6;
+    --surface: #FFFFFF;
+    --ink: #151B23;
+    --muted: #55606B;
+    --border: #D8DEE3;
+    --accent: #2C6E8E;
+    --accent-soft: #E3EEF2;
+
+    --c-weakverb: #B24B3F;    --t-weakverb: #FBE6E3;
+    --c-noimpact: #6E5FA0;    --t-noimpact: #EFEBF7;
+    --c-passive: #A15A78;     --t-passive: #F8EAF0;
+    --c-buzzword: #7C7A2E;    --t-buzzword: #F3F2DC;
+    --c-keyword: #B8862A;     --t-keyword: #FBF1DE;
+
+    --c-add: #2E7D4F; --t-add: #E3F3E8;
+    --c-del: #B23B3B; --t-del: #FBE7E7;
+  }}
+
+  @media (prefers-color-scheme: dark) {{
+    :root:not([data-theme="light"]) {{
+      --bg: #10151C;
+      --surface: #171E27;
+      --ink: #E7ECEF;
+      --muted: #9AA7B2;
+      --border: #2A3541;
+      --accent: #6FB6D6;
+      --accent-soft: #1B333D;
+
+      --c-weakverb: #E08478;    --t-weakverb: #3A211F;
+      --c-noimpact: #BBADEA;    --t-noimpact: #2A2440;
+      --c-passive: #E0A0BC;     --t-passive: #3A222C;
+      --c-buzzword: #D8CE7A;    --t-buzzword: #34321A;
+      --c-keyword: #E5BB70;     --t-keyword: #3A2E17;
+
+      --c-add: #7FD09E; --t-add: #16301F;
+      --c-del: #E59A9A; --t-del: #341B1B;
+    }}
+  }}
+
+  :root[data-theme="dark"] {{
+    --bg: #10151C;
+    --surface: #171E27;
+    --ink: #E7ECEF;
+    --muted: #9AA7B2;
+    --border: #2A3541;
+    --accent: #6FB6D6;
+    --accent-soft: #1B333D;
+
+    --c-weakverb: #E08478;    --t-weakverb: #3A211F;
+    --c-noimpact: #BBADEA;    --t-noimpact: #2A2440;
+    --c-passive: #E0A0BC;     --t-passive: #3A222C;
+    --c-buzzword: #D8CE7A;    --t-buzzword: #34321A;
+    --c-keyword: #E5BB70;     --t-keyword: #3A2E17;
+
+    --c-add: #7FD09E; --t-add: #16301F;
+    --c-del: #E59A9A; --t-del: #341B1B;
+  }}
+
+  * {{ box-sizing: border-box; }}
+  body {{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", -apple-system, sans-serif;
+    margin: 0;
+    padding: 40px 24px 80px;
+    line-height: 1.55;
+  }}
+  .wrap {{ max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }}
+
+  .masthead {{ display: flex; flex-direction: column; gap: 4px; }}
+  .eyebrow {{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }}
+  h1.title {{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: clamp(22px, 4vw, 30px);
+    font-weight: 600;
+    margin: 2px 0 0;
+    text-wrap: balance;
+  }}
+  .subtitle {{ color: var(--muted); font-size: 14px; margin: 0; }}
+
+  .stat-row {{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }}
+  .stat {{ background: var(--surface); padding: 14px 16px; }}
+  .stat-value {{
+    font-family: "IBM Plex Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 20px;
+    font-weight: 600;
+  }}
+  .stat-label {{
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 2px;
+  }}
+
+  .panel {{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px clamp(16px, 4vw, 32px) 28px;
+  }}
+  .panel-head {{ display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }}
+  .panel-num {{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }}
+  h2.panel-title {{ font-size: 19px; margin: 0; font-weight: 600; text-wrap: balance; }}
+  .panel-desc {{ color: var(--muted); font-size: 13.5px; margin: 0; max-width: 62ch; }}
+
+  .legend {{
+    display: flex; flex-wrap: wrap; gap: 14px;
+    font-size: 12.5px; color: var(--muted);
+    padding: 10px 14px; margin-bottom: 18px;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  }}
+  .legend-item {{ display: flex; align-items: center; gap: 6px; }}
+  .legend-swatch {{ width: 10px; height: 10px; border-radius: 2px; display: inline-block; }}
+  .legend-count {{ font-family: "IBM Plex Mono", monospace; color: var(--ink); font-weight: 500; }}
+  .sw-weak-verb {{ background: var(--c-weakverb); }}
+  .sw-passive-voice {{ background: var(--c-passive); }}
+  .sw-buzzword {{ background: var(--c-buzzword); }}
+  .sw-keyword {{ background: var(--c-keyword); }}
+
+  .missing-kw {{ margin-bottom: 20px; }}
+  .missing-kw-label {{ font-size: 12.5px; color: var(--muted); margin-bottom: 8px; }}
+  .chip-row {{ display: flex; flex-wrap: wrap; gap: 6px; }}
+  .chip {{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    padding: 3px 9px;
+    border-radius: 20px;
+  }}
+  .chip-keyword {{ background: var(--t-keyword); color: var(--c-keyword); }}
+
+  .cv-name {{ font-size: 17px; margin: 0 0 4px; font-weight: 600; }}
+  .cv-section {{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-top: 1px solid var(--border);
+    margin: 22px 0 10px;
+    padding-top: 16px;
+  }}
+  .cv-section:first-of-type {{ border-top: none; margin-top: 8px; padding-top: 0; }}
+  .cv-role {{ font-weight: 600; margin: 14px 0 0; font-size: 14.5px; }}
+  .cv-companyline {{ margin: 0 0 2px; font-size: 13.5px; color: var(--muted); }}
+  .cv-subtitle {{ font-style: italic; font-size: 13px; color: var(--muted); margin: 0 0 6px; }}
+  .cv-body {{ font-size: 14px; margin: 6px 0; }}
+
+  ul {{ list-style: none; margin: 4px 0 6px; padding: 0; display: flex; flex-direction: column; gap: 5px; }}
+  li {{
+    font-size: 13.8px;
+    padding: 5px 10px 5px 12px;
+    border-left: 3px solid transparent;
+    border-radius: 3px;
+  }}
+  li.li-weak-verb {{ border-left-color: var(--c-weakverb); }}
+  li.li-passive-voice {{ border-left-color: var(--c-passive); }}
+  li.li-buzzword {{ border-left-color: var(--c-buzzword); }}
+
+  mark {{ border-radius: 3px; padding: 0 2px; color: inherit; }}
+  .mk-weakverb {{ background: var(--t-weakverb); }}
+  .mk-buzzword {{ background: var(--t-buzzword); }}
+  .mk-passive {{ background: var(--t-passive); }}
+
+  .tag {{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.02em;
+    padding: 1px 6px;
+    border-radius: 20px;
+    margin-left: 6px;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
+  }}
+  .tag-weak-verb {{ background: var(--t-weakverb); color: var(--c-weakverb); }}
+  .tag-passive-voice {{ background: var(--t-passive); color: var(--c-passive); }}
+  .tag-buzzword {{ background: var(--t-buzzword); color: var(--c-buzzword); }}
+
+  .diff-scroll {{ overflow-x: auto; }}
+  .diff-line {{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    white-space: pre-wrap;
+    padding: 3px 10px;
+    border-radius: 3px;
+    line-height: 1.5;
+  }}
+  .diff-add {{ background: var(--t-add); color: var(--c-add); }}
+  .diff-add::before {{ content: "+ "; opacity: 0.7; }}
+  .diff-del {{ background: var(--t-del); color: var(--c-del); text-decoration: line-through; text-decoration-thickness: 1px; opacity: 0.85; }}
+  .diff-del::before {{ content: "− "; opacity: 0.7; }}
+  .diff-equal {{ color: var(--muted); padding-left: 10px; }}
+  .diff-collapsed {{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    color: var(--muted);
+    text-align: center;
+    padding: 6px 0;
+    opacity: 0.7;
+  }}
+
+  footer {{ text-align: center; color: var(--muted); font-size: 12px; padding-top: 8px; }}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="masthead">
+    <div class="eyebrow">CV review · view only</div>
+    <h1 class="title">{title}</h1>
+  </div>
+
+  <div class="stat-row">
+    {stats_html}
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-num">01 · Content &amp; ATS issues</div>
+      <h2 class="panel-title">Where the checklist flagged something</h2>
+      <p class="panel-desc">Mechanical checks only, not a verdict. A flagged bullet is a candidate to look at, not necessarily a problem. Quantified impact is reported as one stat above, not per bullet; many legitimate bullets don't carry a number.</p>
+    </div>
+    <div class="legend">{legend_html}</div>
+    <div class="missing-kw">
+      <div class="missing-kw-label">JD terms appearing &ge;2&times; that this CV doesn't use verbatim:</div>
+      <div class="chip-row">{missing_html}</div>
+    </div>
+    {cv_html}
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-num">02 · What changed vs. master</div>
+      <h2 class="panel-title">Line-level diff against cv/master.md</h2>
+      <p class="panel-desc">Line-based, not move-aware: reordered content shows as a remove + add pair rather than a move. Long unchanged runs are collapsed.</p>
+    </div>
+    <div class="diff-scroll">
+      {diff_html}
+    </div>
+  </div>
+
+  <footer>Generated by scripts/build_cv_review.py · Job Pipeline screen check</footer>
+</div>
+</body>
+</html>
