@@ -11,10 +11,13 @@ The pipeline logic in this repo is shared. Some pieces can't be: what you're tar
 
 Check status any time: `python3 scripts/check_setup.py`.
 
+**Before step 0: `/start`.** One question: are you a beginner or experienced with AI tools like Claude Code? Your answer is saved in `profile/user.md`. Beginners get each step explained before it starts (what it's for, how long, what file it produces) and one action at a time; experienced users get brief directions. Say "switch to beginner mode" or "switch to experienced mode" any time. The [user guide](user-guide.md) has both tracks.
+
 ## Summary
 
 | Step | Writes | Blocks until done | Why it can't ship pre-filled |
 |------|--------|-------------------|------------------------------|
+| Start | `profile/user.md` | Every command | How much to explain depends on you |
 | 0 Master CV | `cv/master.md` | Everything | It's your career, in your words |
 | 1 Profile | `profile/profile.md` | `/score` | Targets, throughline, and proof points are yours |
 | 2 Rubric | `profile/rubric.md` | `/score` | "Core domain" and "right level" differ for everyone |

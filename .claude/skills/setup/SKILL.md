@@ -27,7 +27,10 @@ before reaching step 5, run step 5 first.
 ## Running
 
 1. Run `python3 scripts/check_setup.py`. It lists every step as done or
-   pending.
+   pending. If "Start" is pending, run the `start` skill first. Explain each
+   step at the level recorded in `profile/user.md`: for beginners, say what
+   the step is for, how long it takes, and what file it will produce before
+   the first question.
 2. If step 0 is pending, stop and run `/cv-master`. Every later step reads
    the master CV for its recommended answers, so it has to exist first.
    Remind the user that the master CV is strongly encouraged to be written by

@@ -7,6 +7,7 @@ approval.
 
 | File | Step | What it holds |
 |------|------|---------------|
+| `user.md` | Start (`/start`) | Beginner or experienced, and how Claude should explain things |
 | `../cv/master.md` | 0 (`/cv-master`) | Your master CV. Strongly encouraged to be written by you. |
 | `profile.md` | 1 | Targets, throughline, domains, proof points, claim rules |
 | `rubric.md` | 2, 6 | Scoring weights, domain tiers, level band, hard gaps, anchor |

@@ -13,6 +13,11 @@ across applications.
 
 ## Ground rules (every command, every step)
 
+0. **Experience level first.** If `profile/user.md` still starts with
+   `<!-- SETUP-STUB`, run the `start` skill before anything else: it asks
+   whether the user is a beginner or experienced with AI tools and records
+   how to work with them. Once answered, follow the "How Claude works with
+   you" block in `profile/user.md` in every session and every command.
 1. **The master CV is ground truth, and the user writes it.** Every score,
    check, tailored CV, and cover letter compares against `cv/master.md`. The
    user is strongly encouraged to draft it themselves; `/cv-master` helps with
@@ -32,6 +37,7 @@ across applications.
 
    | File | Holds | Written by |
    |------|-------|-----------|
+   | `profile/user.md` | Experience level and how to explain things | `/start` |
    | `cv/master.md` | Master CV, the ground truth | Step 0, `/cv-master` (user-drafted) |
    | `profile/profile.md` | Targets, throughline, domains, proof points, credential to surface, claim rules | Step 1 |
    | `profile/rubric.md` | Weights, domain tiers, level band, hard gaps, pivot threshold, anchor | Steps 2 and 6 |
@@ -152,6 +158,7 @@ run finishes with setup step 6 to set it.
 
 | Command | Does | Skill |
 |---------|------|-------|
+| `/start` | First run: beginner or experienced? Sets how every later step is explained | `.claude/skills/start` |
 | `/cv-master` | Step 0: build or revise the master CV (user-drafted) | `.claude/skills/cv-master` |
 | `/setup [step]` | Steps 1-6: one grill-me interview per personal setup piece | `.claude/skills/setup` |
 | `/score <url, slug, or pasted JD>` | Retrieve JD, score, run the screen check, stop on a decision | `.claude/skills/score` |

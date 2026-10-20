@@ -31,6 +31,8 @@ More in [docs/scoring.md](docs/scoring.md).
 ## How it works
 
 ```
+Start   /start         One question: beginner or experienced with AI tools?
+                       Sets how much Claude explains from then on
 Step 0  /cv-master     You write your master CV (Claude formats, interviews, reviews)
 Steps 1-6  /setup      Short interviews that capture the parts only you can supply
                        (profile, rubric, voice, export format, tracking, score anchor)
@@ -50,6 +52,7 @@ The pipeline logic is shared. The parts that make it yours can't ship pre-filled
 
 | Step | What | Command | You'll be asked about |
 |------|------|---------|-----------------------|
+| Start | Experience check | `/start` | Are you new to AI tools like Claude Code, or experienced? Beginners get each step explained; experienced users get brief directions |
 | 0 | **Master CV (you write it)** | `/cv-master` | Your existing resume, then the evidence behind each role |
 | 1 | Profile | `/setup 1` | Target roles, career throughline, domains, proof points, claims to avoid |
 | 2 | Rubric | `/setup 2` | Weights, what counts as core vs. adjacent for you, your level, hard gaps |
@@ -62,25 +65,22 @@ Details: [docs/setup-steps.md](docs/setup-steps.md).
 
 ## Get started
 
-1. **Copy this repo.** Click **Use this template** and create a **private** repository. It will hold your CV, contact details, and application history. See [docs/privacy.md](docs/privacy.md).
-2. **Clone it and install the requirements:**
-   ```
-   git clone https://github.com/<you>/<your-repo>.git
-   cd <your-repo>
-   pip install -r requirements.txt     # python-docx, for exports
-   ```
-   You also need [Claude Code](https://claude.com/claude-code), Python 3.10+, and [pandoc](https://pandoc.org/installing.html).
-3. **Open Claude Code in the repo folder and run `/cv-master`.** Bring your current resume.
-4. **Run `/setup`** and work through steps 1-5. One step per sitting is fine; nothing is lost between sessions.
-5. **Run `/score` on a real job.** It finishes with step 6.
+**Start with the [user guide](docs/user-guide.md).** It opens with one question, beginner or experienced with AI tools, and gives you the matching track: what to do, when, and where, from making your copy to logging your first outcome.
 
-Full walkthrough: [docs/getting-started.md](docs/getting-started.md).
+The short version:
+
+1. **Copy this repo.** Click **Use this template** and create a **private** repository. It will hold your CV, contact details, and application history. See [docs/privacy.md](docs/privacy.md).
+2. **Put it on your computer** (GitHub Desktop, or `git clone`) and open the folder in [Claude Code](https://claude.com/claude-code).
+3. **Type `/start`.** Claude asks whether you're a beginner or experienced, checks your tools, and offers to install anything missing (Python 3.10+, [pandoc](https://pandoc.org/installing.html), python-docx).
+4. **Run `/cv-master`** with your current resume, and write your master CV.
+5. **Run `/setup`** for steps 1-5. One step per sitting is fine; nothing is lost between sessions.
+6. **Run `/score` on a real job.** It finishes with step 6.
 
 ## Documentation
 
 | Doc | Read it for |
 |-----|-------------|
-| [Getting started](docs/getting-started.md) | Install, copy, first session |
+| [User guide](docs/user-guide.md) | **Start here.** Beginner and experienced tracks: what to do, when, and where |
 | [Setup steps](docs/setup-steps.md) | What each setup interview asks, what it writes, and why it can't ship pre-filled |
 | [Pipeline](docs/pipeline.md) | Day-to-day commands and what each one produces |
 | [Scoring](docs/scoring.md) | The rubric, the gap rules, core vs. pivot, calibration |
@@ -98,3 +98,7 @@ Full walkthrough: [docs/getting-started.md](docs/getting-started.md).
 ## About
 
 Built by Joshua Ritchey while running his own job search with Claude Code, then generalized for others. Issues and suggestions are welcome through GitHub Issues.
+
+## License
+
+[MIT](LICENSE). Use it, change it, share it.

@@ -30,6 +30,7 @@ Claude never submits an application or sends a message. You do.
 
 | Command | Produces | Notes |
 |---------|----------|-------|
+| `/start` | `profile/user.md` | First run: beginner or experienced? Sets the explanation level |
 | `/cv-master` | `cv/master.md` | Step 0. You write; Claude formats, interviews, reviews |
 | `/setup [step]` | `profile/*.md` | Steps 1-6 |
 | `/score <url, slug, or JD>` | `jds/<slug>.md`, `analyses/<slug>.md`, CSV row | Always includes the screen check. Ends on a decision |

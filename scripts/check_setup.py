@@ -5,7 +5,7 @@ check_setup.py: setup status, command gates, and master CV format check.
 Stdlib only. Every pipeline skill runs this first (CLAUDE.md ground rule 3).
 
 Usage (from the repo root):
-    python3 scripts/check_setup.py                 # status of setup steps 0-6
+    python3 scripts/check_setup.py                 # status of /start and setup steps 0-6
     python3 scripts/check_setup.py --for score     # exit 1 if score's steps are pending
     python3 scripts/check_setup.py --cv cv/master.md   # format + content check
 
@@ -158,6 +158,11 @@ def step_done(n: int) -> bool:
     return not text.lstrip().startswith(STUB)
 
 
+def start_done() -> bool:
+    p = ROOT / "profile/user.md"
+    return p.exists() and not p.read_text(encoding="utf-8").lstrip().startswith(STUB)
+
+
 def status() -> dict:
     return {n: step_done(n) for n, *_ in STEPS}
 
@@ -165,6 +170,7 @@ def status() -> dict:
 def print_status(done: dict):
     print("| Step | Name | Status | Run |")
     print("|------|------|--------|-----|")
+    print(f"| Start | Experience check | {'done' if start_done() else 'pending'} | {'' if start_done() else '/start'} |")
     for n, name, _, how in STEPS:
         print(f"| {n} | {name} | {'done' if done[n] else 'pending'} | {'' if done[n] else how} |")
     master = ROOT / "cv/master.md"
@@ -191,6 +197,10 @@ def main():
     required, recommended = GATES[args.command]
     missing = sorted(n for n in required if not done[n])
     soft = sorted(n for n in recommended if not done[n])
+    if not start_done():
+        print(f"/{args.command} is blocked. Run /start first: one question about your experience")
+        print("with AI tools, so the rest of the steps are explained at the right level.")
+        sys.exit(1)
     if missing:
         print(f"/{args.command} is blocked. Pending setup:")
         for n in missing:

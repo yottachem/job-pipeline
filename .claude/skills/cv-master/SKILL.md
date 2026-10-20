@@ -5,6 +5,9 @@ description: Step 0 of setup, required before anything else. Helps the user buil
 
 # CV Master (Step 0)
 
+If `profile/user.md` still starts with `<!-- SETUP-STUB`, run the `start`
+skill first. Then follow its "How Claude works with you" block throughout.
+
 `cv/master.md` is the ground truth for the whole pipeline. Nothing downstream
 can be more accurate or specific than it is, and tailoring never adds claims
 that aren't in it.
