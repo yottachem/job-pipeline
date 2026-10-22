@@ -16,7 +16,8 @@ details pandoc can't express:
   - keep-with-next on headers and role lines so none strand at a page bottom
 
 Requires: pandoc on PATH, python-docx (pip install -r requirements.txt).
-Optional: --pdf converts with LibreOffice (soffice) when installed.
+Optional: --pdf converts with LibreOffice (soffice) when installed, else with
+Microsoft Word on macOS (exported inside Word's sandbox container).
 
 Usage (from the repo root):
     python3 scripts/export_docx.py --md cv/<slug>.md --out "Lastname CV Company.docx" \\
@@ -190,13 +191,48 @@ def postprocess(path: Path, font: str, size_pt: float, rule: bool, styled: bool,
     doc.save(str(path))
 
 
+def word_to_pdf(path: Path) -> bool:
+    """macOS fallback: export through Microsoft Word over AppleScript.
+
+    Word is sandboxed. Saving outside folders it has been granted raises a
+    "Grant File Access" dialog and the AppleEvent times out, so the export
+    runs inside Word's own container and the PDF is moved back afterward.
+    """
+    if sys.platform != "darwin" or not Path("/Applications/Microsoft Word.app").exists():
+        return False
+    box = Path.home() / "Library/Containers/com.microsoft.Word/Data/Documents/job-pipeline-export"
+    box.mkdir(parents=True, exist_ok=True)
+    src = box / path.name
+    pdf = src.with_suffix(".pdf")
+    shutil.copy(path, src)
+    script = f"""
+with timeout of 60 seconds
+tell application "Microsoft Word"
+    open POSIX file "{src}"
+    delay 1
+    save as document "{src.name}" file name "{pdf}" file format format PDF
+    close document "{src.name}" saving no
+end tell
+end timeout
+"""
+    try:
+        subprocess.run(["osascript", "-e", script], check=True, capture_output=True)
+        shutil.move(str(pdf), str(path.with_suffix(".pdf")))
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
+    finally:
+        src.unlink(missing_ok=True)
+    return True
+
+
 def to_pdf(path: Path):
     soffice = shutil.which("soffice") or shutil.which("libreoffice")
-    if not soffice:
-        print("No LibreOffice found for --pdf. Export to PDF from Word instead.", file=sys.stderr)
+    if soffice:
+        subprocess.run([soffice, "--headless", "--convert-to", "pdf", "--outdir",
+                        str(path.parent), str(path)], check=True, capture_output=True)
+    elif not word_to_pdf(path):
+        print("No LibreOffice or Microsoft Word found for --pdf. Export to PDF manually.", file=sys.stderr)
         return
-    subprocess.run([soffice, "--headless", "--convert-to", "pdf", "--outdir",
-                    str(path.parent), str(path)], check=True, capture_output=True)
     print(f"wrote {path.with_suffix('.pdf')}")
 
 
