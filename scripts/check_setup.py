@@ -56,6 +56,9 @@ GATES = {
 def validate_cv(text: str) -> list[str]:
     """Return format errors that would break the scripts. Empty list = valid."""
     errors = []
+    if "FICTIONAL EXAMPLE" in text:
+        errors.append("This is still the fictional sample CV (examples/sample-master.md). "
+                      "Replace it with your own: /cv-master.")
     body = strip_html_comments(text)
     lines = body.splitlines()
 

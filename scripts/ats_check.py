@@ -44,7 +44,21 @@ WORD_RE = re.compile(r"[a-zA-Z][a-zA-Z0-9+#/.\-]{1,}")
 
 
 def tokenize(text: str) -> list[str]:
-    return [w.lower() for w in WORD_RE.findall(text)]
+    # Strip sentence punctuation the pattern keeps ("preferred." -> "preferred")
+    return [w.rstrip("./-").lower() for w in WORD_RE.findall(text)]
+
+
+def split_frontmatter(text: str) -> tuple[dict, str]:
+    """Return (frontmatter fields, body). JD files start with a --- block."""
+    m = re.match(r"\A---\n(.*?)\n---\n", text, re.S)
+    if not m:
+        return {}, text
+    fields = {}
+    for line in m.group(1).splitlines():
+        if ":" in line:
+            k, v = line.split(":", 1)
+            fields[k.strip()] = v.strip()
+    return fields, text[m.end():]
 
 
 def significant_counts(text: str) -> Counter:
@@ -171,7 +185,13 @@ def check_structure(cv_text: str) -> dict:
 # --- keyword overlap ----------------------------------------------------------
 
 def keyword_overlap(cv_text: str, jd_text: str) -> dict:
+    # Score the posting body only, and never ask the CV to contain the
+    # employer's own name.
+    fields, jd_text = split_frontmatter(jd_text)
+    exclude = set(tokenize(re.sub(r"\(.*?\)", "", fields.get("company", ""))))
     jd_counts = significant_counts(jd_text)
+    for w in exclude:
+        jd_counts.pop(w, None)
     cv_counts = significant_counts(cv_text)
     jd_terms = set(jd_counts)
     cv_terms = set(cv_counts)
@@ -185,6 +205,7 @@ def keyword_overlap(cv_text: str, jd_text: str) -> dict:
 
     return {
         "overlap_pct": overlap_pct,
+        "jd_term_count": len(jd_terms),
         "matched_keywords": matched,
         "missing_keywords": missing_important,
     }
@@ -215,7 +236,7 @@ def render_human_readable(report: dict) -> str:
     lines.append("## ATS & Content Check")
     lines.append("")
     lines.append(f"**Keyword overlap: {kw['overlap_pct']}%** "
-                  f"({len(kw['matched_keywords'])} matched / {len(kw['matched_keywords']) + len(kw['missing_keywords'])} significant JD terms)")
+                  f"({len(kw['matched_keywords'])} matched / {kw['jd_term_count']} significant JD terms)")
     if kw["missing_keywords"]:
         lines.append(f"- Missing (appear ≥2× in JD, absent from CV): {', '.join(kw['missing_keywords'][:20])}")
     lines.append("  <!-- unigram frequency match, no POS tagging; expect some generic-word noise")
